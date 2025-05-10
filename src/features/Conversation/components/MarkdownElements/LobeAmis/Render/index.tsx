@@ -6,10 +6,10 @@ import { memo, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Center, Flexbox } from 'react-layout-kit';
 
+import { InPortalThreadContext } from '@/features/Conversation/components/ChatItem/InPortalThreadContext';
 import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors, chatSelectors } from '@/store/chat/selectors';
 
-import { InPortalThreadContext } from '../../../ChatItem/InPortalThreadContext';
 import { MarkdownElementProps } from '../../type';
 
 interface AmisProps extends MarkdownElementProps {
@@ -79,25 +79,22 @@ const useStyles = createStyles(({ css, token, isDarkMode }) => ({
   `,
 }));
 
-const AmisRenderer = memo<AmisProps>(({ children, node, id }) => {
+const AmisRenderer = memo<AmisProps>(({ children, id, title = 'test' }) => {
   const { t } = useTranslation('chat');
   const { styles } = useStyles();
   const { message } = App.useApp();
   const [mounted, setMounted] = useState(false);
-
+  console.log('title', title);
   // 从 node.properties 中提取 schema 和 title
   const rawChildren = children
     ? typeof children === 'string'
       ? children
       : JSON.stringify(children)
     : '';
-  const schemaStr = node?.properties?.schema || rawChildren;
-  console.log('Initial schemaStr:', schemaStr);
-  console.log('node.properties:', node?.properties);
-  console.log('children type:', typeof children);
-  console.log('children value:', children);
+  const schemaStr = rawChildren;
 
-  const title = node?.properties?.title || 'AMIS 低代码组件';
+  console.log('schemaStr', schemaStr);
+  // const title = node?.properties?.title || 'AMIS 低代码组件';
 
   // 获取线程上下文和状态
   const inThread = useContext(InPortalThreadContext);
@@ -113,22 +110,7 @@ const AmisRenderer = memo<AmisProps>(({ children, node, id }) => {
   // 在 Portal 中渲染 AMIS 组件
   const renderAmisInPortal = () => {
     console.log('renderAmisInPortal called');
-
-    // 从 localStorage 中获取 schema
-    let savedSchema = schemaStr;
-    try {
-      const storedSchema = localStorage.getItem(`amis-schema-${id}`);
-      if (storedSchema) {
-        savedSchema = storedSchema;
-        console.log('Schema retrieved from localStorage');
-      } else {
-        console.warn('Schema not found in localStorage, using original schema');
-      }
-    } catch (e) {
-      console.error('Failed to retrieve schema from localStorage:', e);
-    }
-
-    console.log('Schema to render:', savedSchema);
+    console.log('Schema to render:', schemaStr);
 
     // 检查是否是当前打开的 artifact
     const currentArtifactMessageId = chatPortalSelectors.artifactMessageId(useChatStore.getState());
@@ -160,7 +142,7 @@ const AmisRenderer = memo<AmisProps>(({ children, node, id }) => {
           // 解析 JSON schema
           let amisSchema;
           try {
-            amisSchema = typeof savedSchema === 'string' ? JSON.parse(savedSchema) : savedSchema;
+            amisSchema = typeof schemaStr === 'string' ? JSON.parse(schemaStr) : schemaStr;
             console.log('Parsed AMIS schema:', amisSchema);
 
             // 确保有效的 AMIS schema
@@ -235,25 +217,6 @@ const AmisRenderer = memo<AmisProps>(({ children, node, id }) => {
   // 打开 AMIS 组件的函数
   const openAmisUI = () => {
     console.log('openAmisUI called, schemaStr:', schemaStr);
-
-    // 如果 schemaStr 为空，使用默认的示例 schema
-    const finalSchema =
-      schemaStr ||
-      JSON.stringify({
-        body: {
-          tpl: 'Hello AMIS',
-          type: 'tpl',
-        },
-        type: 'page',
-      });
-
-    // 将 schema 保存到 localStorage，以便在 Portal 中获取
-    try {
-      localStorage.setItem(`amis-schema-${id}`, finalSchema);
-      console.log('Schema saved to localStorage:', finalSchema);
-    } catch (e) {
-      console.error('Failed to save schema to localStorage:', e);
-    }
 
     openAmis({
       id,
