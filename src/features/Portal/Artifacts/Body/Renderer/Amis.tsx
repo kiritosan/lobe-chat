@@ -262,12 +262,7 @@ const AmisRenderer = memo<AmisRendererProps>(({ code }) => {
   //   );
   // }
 
-  return (
-    <>
-      <div>Amis</div>
-      <div className={styles.container} id="amis-container" ref={containerRef} />
-    </>
-  );
+  return <div className={styles.container} id="amis-container" ref={containerRef} />;
 });
 
 export default AmisRenderer;

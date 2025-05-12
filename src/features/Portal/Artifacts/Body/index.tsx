@@ -83,10 +83,9 @@ const ArtifactsUI = memo(() => {
     >
       {
         <>
-          <div>111</div>
           <Highlighter
             language={language || 'txt'}
-            style={{ maxHeight: '100%', overflow: 'hidden' }}
+            style={{ maxHeight: '100%', overflow: 'scroll' }}
           >
             {artifactContent}
           </Highlighter>
