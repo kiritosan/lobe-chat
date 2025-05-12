@@ -35,6 +35,7 @@ const useStyles = createStyles(({ css, token }) => ({
 }));
 
 const PortalPanel = memo(({ children }: PropsWithChildren) => {
+  console.log('PortalPanel', children);
   const { styles } = useStyles();
   const { md = true } = useResponsive();
 

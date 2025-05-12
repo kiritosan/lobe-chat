@@ -91,6 +91,7 @@ const Render = memo<ArtifactProps>(({ identifier, title, type, language, childre
         const currentArtifactMessageId = chatPortalSelectors.artifactMessageId(
           useChatStore.getState(),
         );
+        console.log('currentArtifactMessageId id', currentArtifactMessageId, id);
         if (currentArtifactMessageId === id) {
           closeArtifact();
         } else {

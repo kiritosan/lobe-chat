@@ -39,15 +39,21 @@ export const chatPortalSlice: StateCreator<
   openArtifact: (artifact) => {
     get().togglePortal(true);
 
+    console.log('openArtifact', artifact);
+
     set({ portalArtifact: artifact }, false, 'openArtifact');
   },
   openFilePreview: (portal) => {
     get().togglePortal(true);
 
+    console.log('openFilePreview', portal);
+
     set({ portalFile: portal }, false, 'openFilePreview');
   },
   openMessageDetail: (messageId) => {
     get().togglePortal(true);
+
+    console.log('openMessageDetail', messageId);
 
     set({ portalMessageDetail: messageId }, false, 'openMessageDetail');
   },
@@ -55,10 +61,15 @@ export const chatPortalSlice: StateCreator<
   openToolUI: (id, identifier) => {
     get().togglePortal(true);
 
+    console.log('openToolUI', id, identifier);
+
     set({ portalToolMessage: { id, identifier } }, false, 'openToolUI');
   },
   togglePortal: (open) => {
     const showInspector = open === undefined ? !get().showPortal : open;
+
+    console.log('togglePortal', showInspector);
+
     set({ showPortal: showInspector }, false, 'toggleInspector');
   },
   // updateArtifactContent: (content) => {

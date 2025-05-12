@@ -107,112 +107,113 @@ const AmisRenderer = memo<AmisProps>(({ children, id, title = 'test' }) => {
     ];
   });
 
-  // 在 Portal 中渲染 AMIS 组件
-  const renderAmisInPortal = () => {
-    console.log('renderAmisInPortal called');
-    console.log('Schema to render:', schemaStr);
+  // // 在 Portal 中渲染 AMIS 组件
+  // const renderAmisInPortal = () => {
+  //   console.log('renderAmisInPortal called');
+  //   console.log('Schema to render:', schemaStr);
 
-    // 检查是否是当前打开的 artifact
-    const currentArtifactMessageId = chatPortalSelectors.artifactMessageId(useChatStore.getState());
+  //   // 检查是否是当前打开的 artifact
+  //   const currentArtifactMessageId = chatPortalSelectors.artifactMessageId(useChatStore.getState());
 
-    if (currentArtifactMessageId === id) {
-      // 尝试查找不同的容器选择器
-      const selectors = [
-        '.artifact-portal-container',
-        '.artifact-content',
-        '.portal-content',
-        '[data-testid="artifact-content"]',
-        '[class*="artifact"]',
-        '[class*="portal"]',
-      ];
+  //   if (currentArtifactMessageId === id) {
+  //     // 尝试查找不同的容器选择器
+  //     const selectors = [
+  //       '.artifact-portal-container',
+  //       '.artifact-content',
+  //       '.portal-content',
+  //       '[data-testid="artifact-content"]',
+  //       '[class*="artifact"]',
+  //       '[class*="portal"]',
+  //     ];
 
-      let portalContainer = null;
-      for (const selector of selectors) {
-        const container = document.querySelector(selector);
-        if (container) {
-          portalContainer = container;
-          console.log('Found portal container with selector:', selector);
-          break;
-        }
-      }
+  //     let portalContainer = null;
+  //     for (const selector of selectors) {
+  //       const container = document.querySelector(selector);
+  //       if (container) {
+  //         portalContainer = container;
+  //         console.log('Found portal container with selector:', selector);
+  //         break;
+  //       }
+  //     }
 
-      if (portalContainer) {
-        console.log('Rendering AMIS in portal container');
-        try {
-          // 解析 JSON schema
-          let amisSchema;
-          try {
-            amisSchema = typeof schemaStr === 'string' ? JSON.parse(schemaStr) : schemaStr;
-            console.log('Parsed AMIS schema:', amisSchema);
+  //     if (portalContainer) {
+  //       console.log('Rendering AMIS in portal container');
+  //       try {
+  //         // 解析 JSON schema
+  //         let amisSchema;
+  //         try {
+  //           console.log('schemaStr',schemaStr)
+  //           amisSchema = typeof schemaStr === 'string' ? JSON.parse(schemaStr) : schemaStr;
+  //           console.log('Parsed AMIS schema:', amisSchema);
 
-            // 确保有效的 AMIS schema
-            if (!amisSchema || typeof amisSchema !== 'object') {
-              console.warn('Invalid AMIS schema, using default schema');
-              amisSchema = {
-                body: {
-                  tpl: 'Hello AMIS',
-                  type: 'tpl',
-                },
-                type: 'page',
-              };
-            }
-          } catch (e) {
-            console.error('Failed to parse AMIS schema, using default schema:', e);
-            amisSchema = {
-              body: {
-                tpl: 'Hello AMIS',
-                type: 'tpl',
-              },
-              type: 'page',
-            };
-          }
+  //           // 确保有效的 AMIS schema
+  //           if (!amisSchema || typeof amisSchema !== 'object') {
+  //             console.warn('Invalid AMIS schema, using default schema');
+  //             amisSchema = {
+  //               body: {
+  //                 tpl: 'Hello AMIS',
+  //                 type: 'tpl',
+  //               },
+  //               type: 'page',
+  //             };
+  //           }
+  //         } catch (e) {
+  //           console.error('Failed to parse AMIS schema, using default schema:', e);
+  //           amisSchema = {
+  //             body: {
+  //               tpl: 'Hello AMIS',
+  //               type: 'tpl',
+  //             },
+  //             type: 'page',
+  //           };
+  //         }
 
-          // 创建一个新的容器元素
-          const amisContainer = document.createElement('div');
-          amisContainer.className = styles.portalContainer;
-          amisContainer.id = 'amis-renderer-container';
-          amisContainer.style.width = '100%';
-          amisContainer.style.height = '100%';
+  //         // 创建一个新的容器元素
+  //         const amisContainer = document.createElement('div');
+  //         amisContainer.className = styles.portalContainer;
+  //         amisContainer.id = 'amis-renderer-container';
+  //         amisContainer.style.width = '100%';
+  //         amisContainer.style.height = '100%';
 
-          // 清空现有内容并添加新容器
-          portalContainer.innerHTML = '';
-          portalContainer.append(amisContainer);
+  //         // 清空现有内容并添加新容器
+  //         portalContainer.innerHTML = '';
+  //         portalContainer.append(amisContainer);
 
-          // 动态加载 AMIS
-          const script = document.createElement('script');
-          script.src = 'https://unpkg.com/amis@2.0.0/sdk/sdk.js';
-          script.addEventListener('load', () => {
-            if (window.amisRequire) {
-              const amis = window.amisRequire('amis/embed');
-              amis.embed('#amis-renderer-container', amisSchema);
-              console.log('AMIS rendered successfully in portal');
-            } else {
-              console.error('amisRequire not found');
-            }
-          });
-          document.head.append(script);
+  //         // 动态加载 AMIS
+  //         const script = document.createElement('script');
+  //         script.src = 'https://unpkg.com/amis@2.0.0/sdk/sdk.js';
+  //         script.addEventListener('load', () => {
+  //           if (window.amisRequire) {
+  //             const amis = window.amisRequire('amis/embed');
+  //             amis.embed('#amis-renderer-container', amisSchema);
+  //             console.log('AMIS rendered successfully in portal');
+  //           } else {
+  //             console.error('amisRequire not found');
+  //           }
+  //         });
+  //         document.head.append(script);
 
-          // 添加 CSS
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = 'https://unpkg.com/amis@2.0.0/sdk/sdk.css';
-          document.head.append(link);
-        } catch (e) {
-          console.error('Failed to parse AMIS schema:', e);
-          portalContainer.innerHTML = `
-            <div class="${styles.error}">
-              Invalid AMIS schema: ${(e as Error).message}
-              <pre>${schemaStr}</pre>
-            </div>
-          `;
-        }
-      } else {
-        console.error('Could not find portal container with any of the selectors');
-      }
-    } else {
-      console.log('Current artifact message ID does not match:', currentArtifactMessageId, id);
-    }
-  };
+  //         // 添加 CSS
+  //         const link = document.createElement('link');
+  //         link.rel = 'stylesheet';
+  //         link.href = 'https://unpkg.com/amis@2.0.0/sdk/sdk.css';
+  //         document.head.append(link);
+  //       } catch (e) {
+  //         console.error('Failed to parse AMIS schema:', e);
+  //         portalContainer.innerHTML = `
+  //           <div class="${styles.error}">
+  //             Invalid AMIS schema: ${(e as Error).message}
+  //             <pre>${schemaStr}</pre>
+  //           </div>
+  //         `;
+  //       }
+  //     } else {
+  //       console.error('Could not find portal container with any of the selectors');
+  //     }
+  //   } else {
+  //     console.log('Current artifact message ID does not match:', currentArtifactMessageId, id);
+  //   }
+  // };
 
   // 打开 AMIS 组件的函数
   const openAmisUI = () => {
@@ -228,7 +229,7 @@ const AmisRenderer = memo<AmisProps>(({ children, id, title = 'test' }) => {
 
     // 添加延时渲染，确保 Portal 已经打开
     setTimeout(() => {
-      renderAmisInPortal();
+      // renderAmisInPortal();
     }, 500);
   };
 

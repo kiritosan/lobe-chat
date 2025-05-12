@@ -52,12 +52,14 @@ export const PortalHeader = memo(() => {
 const PortalBody = memo(() => {
   const enabledList: boolean[] = [];
 
+  console.log('items', items);
   for (const item of items) {
     const enabled = item.useEnable();
     enabledList.push(enabled);
   }
-
+  console.log('enabledList', enabledList);
   for (const [i, element] of enabledList.entries()) {
+    console.log('PortalBody', i, element);
     const Body = items[i].Body;
     if (element) {
       return <Body />;

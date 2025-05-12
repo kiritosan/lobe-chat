@@ -12,6 +12,7 @@ const body = css`
 `;
 
 const Body = ({ children }: PropsWithChildren) => {
+  console.log('Body', children);
   return (
     <Flexbox
       className={cx(body, 'portal-body')}

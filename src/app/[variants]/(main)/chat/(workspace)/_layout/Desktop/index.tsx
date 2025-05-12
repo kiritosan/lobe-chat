@@ -9,6 +9,7 @@ import Portal from './Portal';
 import TopicPanel from './TopicPanel';
 
 const Layout = ({ children, topic, conversation, portal }: LayoutProps) => {
+  console.log('portal', portal);
   return (
     <>
       <ChatHeader />

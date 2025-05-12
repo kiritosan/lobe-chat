@@ -40,6 +40,9 @@ const ArtifactsUI = memo(() => {
     }
   }, [isMessageGenerating, displayMode, isArtifactTagClosed]);
 
+  console.log('displayMode', displayMode);
+  console.log('artifactType', artifactType);
+
   const language = useMemo(() => {
     switch (artifactType) {
       case ArtifactType.React: {
@@ -64,10 +67,10 @@ const ArtifactsUI = memo(() => {
   if (!messageId) return;
 
   // show code when the artifact is not closed or the display mode is code or the artifact type is code
-  const showCode =
-    !isArtifactTagClosed ||
-    displayMode === ArtifactDisplayMode.Code ||
-    artifactType === ArtifactType.Code;
+  // const showCode =
+  //   !isArtifactTagClosed ||
+  //   displayMode === ArtifactDisplayMode.Code ||
+  //   artifactType === ArtifactType.Code;
 
   return (
     <Flexbox
@@ -78,13 +81,19 @@ const ArtifactsUI = memo(() => {
       paddingInline={12}
       style={{ overflow: 'hidden' }}
     >
-      {showCode ? (
-        <Highlighter language={language || 'txt'} style={{ maxHeight: '100%', overflow: 'hidden' }}>
-          {artifactContent}
-        </Highlighter>
-      ) : (
-        <Renderer content={artifactContent} type={artifactType} />
-      )}
+      {
+        <>
+          <div>111</div>
+          <Highlighter
+            language={language || 'txt'}
+            style={{ maxHeight: '100%', overflow: 'hidden' }}
+          >
+            {artifactContent}
+          </Highlighter>
+
+          <Renderer content={artifactContent} type={artifactType} />
+        </>
+      }
     </Flexbox>
   );
 });

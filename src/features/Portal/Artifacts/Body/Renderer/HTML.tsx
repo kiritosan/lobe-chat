@@ -15,6 +15,7 @@ const HTMLRenderer = memo<HTMLRendererProps>(({ htmlContent, width = '100%', hei
     if (!doc) return;
 
     doc.open();
+    console.log('htmlContent', htmlContent);
     doc.write(htmlContent);
     doc.close();
   }, [htmlContent]);

@@ -1,4 +1,4 @@
-import { ARTIFACT_TAG_CLOSED_REGEX, ARTIFACT_TAG_REGEX } from '@/const/plugin';
+import { ARTIFACT_AMIS_REGEX, ARTIFACT_TAG_CLOSED_REGEX } from '@/const/plugin';
 import type { ChatStoreState } from '@/store/chat';
 
 import { chatSelectors } from '../message/selectors';
@@ -28,18 +28,22 @@ const artifactCodeLanguage = (s: ChatStoreState) => s.portalArtifact?.language;
 
 const artifactMessageContent = (id: string) => (s: ChatStoreState) => {
   const message = chatSelectors.getMessageById(id)(s);
+  console.log('message', message);
   return message?.content || '';
 };
 
 const artifactCode = (id: string) => (s: ChatStoreState) => {
   const messageContent = artifactMessageContent(id)(s);
-  const result = messageContent.match(ARTIFACT_TAG_REGEX);
+  console.log('messageContent', messageContent);
+  const result = messageContent.match(ARTIFACT_AMIS_REGEX);
 
+  console.log('result', result);
   let content = result?.groups?.content || '';
 
   // Remove markdown code block if content is wrapped
   content = content.replace(/^\s*```[^\n]*\n([\S\s]*?)\n```\s*$/, '$1');
 
+  console.log('content', content);
   return content;
 };
 
