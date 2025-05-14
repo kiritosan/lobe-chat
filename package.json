@@ -115,6 +115,9 @@
       "eslint --fix"
     ]
   },
+  "overrides": {
+    "mdast-util-gfm-autolink-literal": "2.0.0"
+  },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
     "@ant-design/pro-components": "^2.8.7",
@@ -171,6 +174,7 @@
     "amis-ui": "^6.12.0",
     "antd": "^5.24.6",
     "antd-style": "^3.7.1",
+    "axios": "^1.9.0",
     "brotli-wasm": "^3.0.1",
     "chroma-js": "^3.1.2",
     "countries-and-timezones": "^3.7.2",
@@ -368,8 +372,5 @@
         }
       }
     }
-  },
-  "overrides": {
-    "mdast-util-gfm-autolink-literal": "2.0.0"
   }
 }

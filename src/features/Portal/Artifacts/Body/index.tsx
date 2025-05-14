@@ -1,4 +1,6 @@
-import { Highlighter } from '@lobehub/ui';
+import { CodeEditor } from '@lobehub/ui';
+import axios from 'axios';
+// import { ARTIFACT_TAG_REGEX } from '@/const/plugin';
 import { memo, useEffect, useMemo } from 'react';
 import { Flexbox } from 'react-layout-kit';
 
@@ -19,6 +21,8 @@ const ArtifactsUI = memo(() => {
     artifactCodeLanguage,
     isArtifactTagClosed,
   ] = useChatStore((s) => {
+    console.log('求查询一下3', s);
+
     const messageId = chatPortalSelectors.artifactMessageId(s) || '';
 
     return [
@@ -67,10 +71,10 @@ const ArtifactsUI = memo(() => {
   if (!messageId) return;
 
   // show code when the artifact is not closed or the display mode is code or the artifact type is code
-  // const showCode =
-  //   !isArtifactTagClosed ||
-  //   displayMode === ArtifactDisplayMode.Code ||
-  //   artifactType === ArtifactType.Code;
+  const showCode =
+    !isArtifactTagClosed ||
+    displayMode === ArtifactDisplayMode.Code ||
+    artifactType === ArtifactType.Code;
 
   return (
     <Flexbox
@@ -79,9 +83,9 @@ const ArtifactsUI = memo(() => {
       gap={8}
       height={'100%'}
       paddingInline={12}
-      style={{ overflow: 'hidden' }}
+      style={{ minHeight: 0, overflow: 'auto' }}
     >
-      {
+      {/* {
         <>
           <Highlighter
             language={language || 'txt'}
@@ -92,7 +96,45 @@ const ArtifactsUI = memo(() => {
 
           <Renderer content={artifactContent} type={artifactType} />
         </>
-      }
+      } */}
+
+      {showCode ? (
+        // <Highlighter language={language || 'txt'} style={{ maxHeight: '100%', overflow: 'hidden' }}>
+        //   {artifactContent}
+        // </Highlighter>
+        <Flexbox gap={8}>
+          <button
+            onClick={async () => {
+              try {
+                console.log('保存代码1111', artifactContent, language);
+                await axios.post('/api/artifact/save', {
+                  content: artifactContent,
+                  language,
+                  messageId,
+                });
+                // 可以添加成功提示
+              } catch (e) {
+                console.error('保存失败:', e);
+              }
+            }}
+            type="button"
+          >
+            保存代码
+          </button>
+
+          <CodeEditor
+            language={language || 'txt'}
+            onValueChange={(newValue: string) => {
+              // useChatStore.getState().internal_updateMessageContent(messageId, newValue);
+              useChatStore.getState().internal_updateArtifactCode(messageId, newValue);
+            }}
+            style={{ maxHeight: '100%', overflow: 'auto' }}
+            value={artifactContent}
+          />
+        </Flexbox>
+      ) : (
+        <Renderer content={artifactContent} type={artifactType} />
+      )}
     </Flexbox>
   );
 });
