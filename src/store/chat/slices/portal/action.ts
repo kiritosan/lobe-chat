@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand/vanilla';
 
-import { ARTIFACT_TAG_REGEX } from '@/const/plugin';
+import { ARTIFACT_AMIS_REGEX, ARTIFACT_TAG_REGEX } from '@/const/plugin';
 import { chatPortalSelectors } from '@/store/chat/selectors';
 import { ChatStore } from '@/store/chat/store';
 import { PortalArtifact } from '@/types/artifact';
@@ -45,11 +45,11 @@ export const chatPortalSlice: StateCreator<
     console.log('原始数据', original);
     const updated = ARTIFACT_TAG_REGEX.test(original)
       ? original.replace(
-          ARTIFACT_TAG_REGEX,
+          ARTIFACT_AMIS_REGEX,
           // 保留可能存在的标签属性
           (fullMatch, p1, offset, str, groups) => fullMatch.replace(groups.content, code), // ✅ 仅替换内容
         )
-      : `${original}\n<lobeArtifact>${code}</lobeArtifact>`; // ✅ 追加新标签
+      : `${original}\n<lobeAmis>${code}</lobeAmis>`; // ✅ 追加新标签
 
     get().internal_updateMessageContent(id, updated);
   },
@@ -82,11 +82,7 @@ export const chatPortalSlice: StateCreator<
 
     set({ portalToolMessage: { id, identifier } }, false, 'openToolUI');
   },
-  
-  
-  
 
-  
   togglePortal: (open) => {
     const showInspector = open === undefined ? !get().showPortal : open;
 
@@ -95,10 +91,10 @@ export const chatPortalSlice: StateCreator<
     set({ showPortal: showInspector }, false, 'toggleInspector');
   },
   // updateArtifactContent: (content) => {
-//   set({ portalArtifact: content }, false, 'updateArtifactContent');
-// },
-// 为了解决参数“content”隐式具有“any”类型的问题，这里明确指定其类型为 PortalArtifact
-updateArtifactContent: (content: string | PortalArtifact) => {
+  //   set({ portalArtifact: content }, false, 'updateArtifactContent');
+  // },
+  // 为了解决参数“content”隐式具有“any”类型的问题，这里明确指定其类型为 PortalArtifact
+  updateArtifactContent: (content: string | PortalArtifact) => {
     console.log('updateArtifactContent', content);
     // set({ portalArtifact: typeof content === 'string' ? { content } : content }, false, 'updateArtifactContent');
   },

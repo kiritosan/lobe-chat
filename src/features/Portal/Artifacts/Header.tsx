@@ -69,6 +69,7 @@ const Header = () => {
               },
             ]}
             size={'small'}
+            style={{ display: 'none' }}
             value={displayMode}
           />
         )}
