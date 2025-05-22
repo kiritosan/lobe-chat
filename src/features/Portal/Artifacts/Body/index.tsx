@@ -81,7 +81,15 @@ const ArtifactsUI = memo(() => {
   //   artifactType === ArtifactType.Code;
 
   const handleOk = async () => {
-    console.log('保存代码1111', pageName, pagePath);
+    console.log('保存代码33', pageName, pagePath);
+    const postUrl =
+      'https://glm-test.glodon.com/api/open/dynamic/page/metadata/save?appid=appidDepartmentA&easterEgg=glmEffective778899';
+    const params = JSON.parse(artifactContent);
+    const { body, ...rest } = params;
+    const newObj = { ...rest, metadata: body };
+    newObj.name = pageName;
+    newObj.code = pagePath;
+    await axios.post(postUrl, newObj);
     // debugger
     setIsModalOpen(false);
     setPageName('');
@@ -130,9 +138,9 @@ const ArtifactsUI = memo(() => {
         //   {artifactContent}
         // </Highlighter>
         <div style={{ display: 'flex', width: '100%' }}>
-            <div style={{ flex: 1 }}>
-              <Flexbox gap={8}>
-                {/* <button
+          <div style={{ flex: 1 }}>
+            <Flexbox gap={8}>
+              {/* <button
                   type="button"
                   onClick={async () => {
                     try {
@@ -156,62 +164,62 @@ const ArtifactsUI = memo(() => {
                   保存代码2
                 </button> */}
 
-                <Button
-                  onClick={async () => {
-                    try {
-                      console.log('保存代码1111', artifactContent, language);
-                      const params = JSON.parse(artifactContent);
-                      let postUrl = '';
-                      if (params.serviceName) {
-                        // 保存后端元数据
-                        postUrl =
-                          'https://glm-test.glodon.com/api/open/dynamic/api/metadata/save?appid=appidDepartmentA&easterEgg=glmEffective778899';
-                      } else {
-                        setIsModalOpen(true);
-                        postUrl =
-                          'https://glm-test.glodon.com/api/open/dynamic/page/metadata/save?appid=appidDepartmentA&easterEgg=glmEffective778899';
-                      }
-                      if (postUrl === '') {
-                        return;
-                      }
-
-                      await axios.post(postUrl, params);
-                      // 可以添加成功提示
-                    } catch (e) {
-                      console.error('保存失败:', e);
+              <Button
+                onClick={async () => {
+                  try {
+                    console.log('保存代码1111', artifactContent, language);
+                    const params = JSON.parse(artifactContent);
+                    let postUrl = '';
+                    if (params.serviceName) {
+                      // 保存后端元数据
+                      postUrl =
+                        'https://glm-test.glodon.com/api/open/dynamic/api/metadata/save?appid=appidDepartmentA&easterEgg=glmEffective778899';
+                    } else {
+                      setIsModalOpen(true);
+                      // postUrl =
+                      //   'https://glm-test.glodon.com/api/open/dynamic/page/metadata/save?appid=appidDepartmentA&easterEgg=glmEffective778899';
                     }
-                  }}
-                  type="primary"
-                >
-                  保存代码2
-                </Button>
-                <Modal
-                  onCancel={() => setIsModalOpen(false)}
-                  onOk={handleOk}
-                  open={isModalOpen}
-                  title="保存"
-                >
-                  <span>页面路径：</span>
-                  <Input onChange={(e) => setPagePath(e.target.value)} value={pagePath} />
-                  <span>页面名称：</span>
-                  <Input onChange={(e) => setPageName(e.target.value)} value={pageName} />
-                </Modal>
+                    if (postUrl === '') {
+                      return;
+                    }
 
-                <CodeEditor
-                  language={language || 'txt'}
-                  onValueChange={(newValue: string) => {
-                    // useChatStore.getState().internal_updateMessageContent(messageId, newValue);
-                    useChatStore.getState().internal_updateArtifactCode(messageId, newValue);
-                  }}
-                  style={{ maxHeight: '100%', overflow: 'auto' }}
-                  value={artifactContent}
-                />
-              </Flexbox>
-            </div>
-            <div style={{ flex: 1 }}>
-              <Renderer content={artifactContent} type={artifactType} />
-            </div>
+                    await axios.post(postUrl, params);
+                    // 可以添加成功提示
+                  } catch (e) {
+                    console.error('保存失败:', e);
+                  }
+                }}
+                type="primary"
+              >
+                保存代码2
+              </Button>
+              <Modal
+                onCancel={() => setIsModalOpen(false)}
+                onOk={handleOk}
+                open={isModalOpen}
+                title="保存"
+              >
+                <span>页面路径：</span>
+                <Input onChange={(e) => setPagePath(e.target.value)} value={pagePath} />
+                <span>页面名称：</span>
+                <Input onChange={(e) => setPageName(e.target.value)} value={pageName} />
+              </Modal>
+
+              <CodeEditor
+                language={language || 'txt'}
+                onValueChange={(newValue: string) => {
+                  // useChatStore.getState().internal_updateMessageContent(messageId, newValue);
+                  useChatStore.getState().internal_updateArtifactCode(messageId, newValue);
+                }}
+                style={{ maxHeight: '100%', overflow: 'auto' }}
+                value={artifactContent}
+              />
+            </Flexbox>
           </div>
+          <div style={{ flex: 1 }}>
+            <Renderer content={artifactContent} type={artifactType} />
+          </div>
+        </div>
       }
     </Flexbox>
   );

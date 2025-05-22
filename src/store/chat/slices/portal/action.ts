@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand/vanilla';
 
-import { ARTIFACT_AMIS_REGEX, ARTIFACT_TAG_REGEX } from '@/const/plugin';
+import { ARTIFACT_AMIS_REGEX } from '@/const/plugin';
 import { chatPortalSelectors } from '@/store/chat/selectors';
 import { ChatStore } from '@/store/chat/store';
 import { PortalArtifact } from '@/types/artifact';
@@ -43,7 +43,7 @@ export const chatPortalSlice: StateCreator<
   internal_updateArtifactCode: (id, code) => {
     const original = chatPortalSelectors.artifactMessageContent(id)(get());
     console.log('原始数据', original);
-    const updated = ARTIFACT_TAG_REGEX.test(original)
+    const updated = ARTIFACT_AMIS_REGEX.test(original)
       ? original.replace(
           ARTIFACT_AMIS_REGEX,
           // 保留可能存在的标签属性
